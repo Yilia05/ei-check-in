@@ -14,18 +14,20 @@ Github: https://github.com/Hang-Hu
 Welcome to join and leave you information here
 '''
 
+
 def parArg():
     parser = argparse.ArgumentParser(
         description='Auto check in for eBay intern in Shanghai.')
     parser.add_argument('-v', action='version', version='%(prog)s 1.0')
     subparsers = parser.add_subparsers(help='sub-command help', dest='command')
-    mul_parser = subparsers.add_parser('mul', help='Check in for multiple days.')
+    mul_parser = subparsers.add_parser('mul',
+                                       help='Check in for multiple days.')
     mul_parser.add_argument('-d', action='store', dest='startdate',
-                        help='The first day to be checked in, format is YYYY-mm-dd such as 2017-08-29.',
-                        required=True)
+                            help='The first day to be checked in, format is YYYY-mm-dd such as 2017-08-29.',
+                            required=True)
     mul_parser.add_argument('-l', action='store', dest='length',
-                        help='The number of days to be checked in.',
-                        required=True)
+                            help='The number of days to be checked in.',
+                            required=True)
     # mul_parser.set_defaults(which='mul')
     '''action='version' is required for version function'''
     today_parser = subparsers.add_parser('today', help='Check in for today.')
@@ -38,7 +40,7 @@ def parArg():
 
 
 def readSecret():
-    with open('secret.json') as secret_file:
+    with open(os.path.join(os.path.dirname(__file__), 'secret.json')) as secret_file:
         secret = json.load(secret_file)
 
     return secret["username"], secret["password"]
@@ -115,7 +117,7 @@ def openbrowser():
 
 def apply_more(startdate, length):
     os.environ['NO_PROXY'] = '127.0.0.1'
-    logging.basicConfig(filename='check-in.log', level=logging.INFO,
+    logging.basicConfig(filename=os.path.join(os.path.dirname(__file__), 'check-in.log'), level=logging.INFO,
                         format='%(asctime)s %(message)s',
                         datefmt='%m %d, %Y %I:%M:%S %p')
     console = logging.StreamHandler()
@@ -143,8 +145,9 @@ def apply_more(startdate, length):
                 except NoSuchWindowException as e:
                     driver = openbrowser()
                 except Exception as e:
-                    logger.error("Exception occurs: " + str(e.__class__) + str(e))
-                    driver.save_screenshot('exception.png')
+                    logger.error("Exception occurs: " + str(e.__class__),
+                                 str(e))
+                    driver.save_screenshot(os.path.join(os.path.dirname(__file__), 'exception.png'))
                 else:
                     logger.info(date + " " + str(result))
                     break

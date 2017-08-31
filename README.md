@@ -44,4 +44,19 @@ python3 check-in.py mul -h
 python3 check-in.py today -h
 ```
 
+## Auto check in every day (mac)
+
+```
+crontab -e
+```
+
+Add the following line and replace `/Users/hanhu/Documents/CodeSpace/gitRepository` with the path your `ei-check-in` is at.
+
+```
+# m h  dom mon dow   command
+  0 10  *   *   *        python3 /Users/hanhu/Documents/CodeSpace/gitRepository/ei-check-in/src/check-in.py today
+```
+
+Use `crontab -l` to check your cron job.
+
 If you have any improvements, welcome to fork, edits and pull requests.
